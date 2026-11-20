@@ -1,6 +1,6 @@
 FROM rust:1-bookworm
 
-# --- Node.js (required to install the Claude Code CLI) ---
+# --- Node.js (required to install the OpenCode CLI) ---
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
@@ -23,8 +23,8 @@ RUN rustup component add rustfmt clippy rust-analyzer
 # Install task command for running CI tasks
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 
-# --- Claude Code CLI ---
-RUN npm install -g @anthropic-ai/claude-code
+# --- OpenCode CLI ---
+RUN npm install -g @opencode/cli
 
 # --- Non-root user with host-matching UID/GID ---
 ARG DEVEL_UID=1000
@@ -32,15 +32,13 @@ ARG DEVEL_GID=1000
 
 RUN groupadd -g "${DEVEL_GID}" devel \
     && useradd -u "${DEVEL_UID}" -g "${DEVEL_GID}" -m -s /bin/bash devel \
-    && mkdir -p /workspace \
-    && chown -R "${DEVEL_UID}:${DEVEL_GID}" /workspace /usr/local/cargo
+    && chown -R "${DEVEL_UID}:${DEVEL_GID}" /usr/local/cargo
 
 USER devel
-WORKDIR /workspace
+WORKDIR /home/devel
 
-COPY claude.json /home/devel/.claude.json
-RUN mkdir /home/devel/.claude
+RUN mkdir -p /home/devel/.config/opencode
+COPY opencode/ /home/devel/.config/opencode/
 
 ENV CARGO_HOME=
-ENV DISABLE_AUTOUPDATER=1
 

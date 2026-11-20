@@ -1,9 +1,0 @@
-{
-  "hasCompletedOnboarding": true,
-  "theme": "dark-ansi",
-  "projects": {
-    "/workspace": {
-      "hasTrustDialogAccepted": true
-    }
-  }
-}
