@@ -37,8 +37,13 @@ RUN groupadd -g "${DEVEL_GID}" devel \
 USER devel
 WORKDIR /home/devel
 
+# Install OpenCode config
 RUN mkdir -p /home/devel/.config/opencode
 COPY opencode/ /home/devel/.config/opencode/
+
+# Install Git config
+RUN mkdir --mode 700 /home/devel/.ssh
+COPY --chown=devel:devel --chmod=600 ssh_config /home/devel/.ssh/config
 
 ENV CARGO_HOME=
 
