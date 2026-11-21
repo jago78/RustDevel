@@ -1,0 +1,19 @@
+version: '3'
+
+vars:
+  IMAGE_NAME: rust-devel
+  IMAGE_TAG: latest
+
+tasks:
+
+  build:
+    desc: Build {{.IMAGE_NAME}}:{{.IMAGE_TAG}}
+    cmds:
+      - docker build --tag {{.IMAGE_NAME}}:{{.IMAGE_TAG}} .
+
+  run:
+    desc: Run {{.IMAGE_NAME}}:{{.IMAGE_TAG}}
+    interactive: true
+    cmds:
+      - docker run --rm -it {{.IMAGE_NAME}}:{{.IMAGE_TAG}} bash
+
